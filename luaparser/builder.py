@@ -108,6 +108,21 @@ LITERAL_NAMES = ["<INVALID>",
                  "'..'", "'.'", "';'", "NAME", "NUMBER", "STRING", "COMMENT", "LINE_COMMENT",
                  "SPACE", "NEWLINE", "SHEBANG", "LONG_BRACKET"]
 
+class CommonTokenStream2(CommonTokenStream):
+    def __init__(self, stream):
+        super().__init__(stream)
+
+    def LB(self, k: int):
+        token = CommonTokenStream.LB(self, k)
+        if (token != None):
+            CUR['TOKEN'] = token
+        return token
+
+    def LT(self, k: int):
+        token = CommonTokenStream.LT(self, k)
+        if (token != None):
+            CUR['TOKEN'] = token
+        return token
 
 def _listify(obj):
     if not isinstance(obj, list):
@@ -139,7 +154,7 @@ class Builder:
         Tokens.EQ]
 
     def __init__(self, source):
-        self._stream = CommonTokenStream(LuaLexer(InputStream(source)))
+        self._stream = CommonTokenStream2(LuaLexer(InputStream(source)))
         # contains a list of CommonTokens
         self._line_count: int = 0
         self._right_index: int = 0

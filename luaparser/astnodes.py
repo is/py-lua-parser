@@ -4,11 +4,14 @@
 
     Contains all Ast Node definitions.
 """
+from antlr4.Token import Token
 from typing import List, Optional
-
 
 Comments = Optional[List[str]]
 
+CUR = {
+    'TOKEN': None
+}
 
 def _equal_dicts(d1, d2, ignore_keys):
     ignored = set(ignore_keys)
@@ -31,6 +34,8 @@ class Node:
         self.comments: List[str] = comments
         self.start_char: int = None  # start character offset
         self.stop_char: int = None  # stop character offset
+        if CUR['TOKEN']:
+            self.token: Token = CUR['TOKEN']
 
     @property
     def display_name(self) -> str:
